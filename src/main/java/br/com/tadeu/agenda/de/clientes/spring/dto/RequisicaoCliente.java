@@ -52,5 +52,11 @@ public class RequisicaoCliente {
 	
 	}
 	
+	public void transformaClienteEmRequisicao(Cliente cliente) {
+		this.nome = cliente.getNome();
+		this.cpf = cliente.getCpf();
+		this.telefone = cliente.getTelefone();
+		this.email = cliente.getEmail();
+	}
 	
 }

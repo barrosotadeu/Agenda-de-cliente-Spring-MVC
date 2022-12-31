@@ -31,7 +31,7 @@
 			      <td th:text="${cliente.email}"></td>
 			      <td th:text="${cliente.vendeu}"></td>
 			      <td scope="col"><a th:href="@{clientes/{clienteId}(clienteId = ${cliente.id})}" href="">Detalhes</a></td>
-			      <td scope="col"><a href="">Editar</a></td>
+			      <td scope="col"><a th:href="@{clientes/{clienteId}/edit(clienteId = ${cliente.id})}" href="">Editar</a></td>
 			      <td scope="col"><a th:href="@{clientes/{clienteId}/delete(clienteId = ${cliente.Id})}" href="">Deletar</a></td>
 			    </tr>
 			    

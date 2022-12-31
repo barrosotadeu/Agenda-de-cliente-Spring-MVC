@@ -84,4 +84,44 @@ public class ClienteController {
 		
 		return new ModelAndView("redirect:/clientes");
 	}
+	
+	
+	@GetMapping("/clientes/{id}/edit")
+	public ModelAndView edit(@PathVariable Long id, RequisicaoCliente requisicao) {
+		Optional<Cliente> optional = this.clienteRepository.findById(id);
+		
+		if(optional.isPresent()) {
+			Cliente cliente = optional.get();
+			requisicao.transformaClienteEmRequisicao(cliente);
+			ModelAndView mv = new ModelAndView("clientes/edit");
+			mv.addObject("clienteId", cliente.getId());
+			return mv;
+		}
+		else {
+			return new ModelAndView("redirect:/clientes");
+		}
+		
+		
+
+	}
+	
+	@PostMapping("/clientes/{id}")
+	public ModelAndView atualiza(@PathVariable Long id, @Valid RequisicaoCliente requisicao, BindingResult bindingResult) {
+		if(bindingResult.hasErrors()) {	
+			return new ModelAndView("/clientes/{id}/edit");
+		}
+		else {
+			Optional<Cliente> optional = this.clienteRepository.findById(id);
+			
+			if(optional.isPresent()) {
+				Cliente cliente = optional.get();
+				requisicao.transformaRequisicaoEmCliente(cliente);
+				this.clienteRepository.save(cliente);
+				return new ModelAndView("redirect:/clientes/" + cliente.getId());
+			}
+			else {
+				return new ModelAndView("redirect:/clientes");
+			}
+		}
+	}
 }
