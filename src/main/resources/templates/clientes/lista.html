@@ -15,6 +15,11 @@
 			      <th scope="col">Telefone</th>
 			      <th scope="col">Email</th>
 			      <th scope="col">Vendeu</th>
+			      <th scope="col"></th>
+			      <th scope="col"></th>
+			      <th scope="col"></th>
+			      
+			      
 			    </tr>
 			  </thead>
 			  <tbody>
@@ -25,6 +30,9 @@
 			      <td th:text="${cliente.telefone}"></td>
 			      <td th:text="${cliente.email}"></td>
 			      <td th:text="${cliente.vendeu}"></td>
+			      <td scope="col"><a th:href="@{clientes/{clienteId}(clienteId = ${cliente.id})}" href="">Detalhes</a></td>
+			      <td scope="col"><a href="">Editar</a></td>
+			      <td scope="col"><a th:href="@{clientes/{clienteId}/delete(clienteId = ${cliente.Id})}" href="">Deletar</a></td>
 			    </tr>
 			    
 			  </tbody>

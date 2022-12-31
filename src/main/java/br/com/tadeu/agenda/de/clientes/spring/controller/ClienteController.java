@@ -1,11 +1,13 @@
 package br.com.tadeu.agenda.de.clientes.spring.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -56,5 +58,30 @@ public class ClienteController {
 		List<Cliente> clientes = this.clienteRepository.findAll();
 		mv.addObject("clientes", clientes);
 		return mv;
+	}
+	
+	@GetMapping("/clientes/{id}")
+	public ModelAndView detalhes(@PathVariable Long id) {
+		
+		
+		Optional<Cliente> optional = this.clienteRepository.findById(id);
+		
+		if(optional.isPresent()) {
+			Cliente cliente = optional.get();
+			ModelAndView mv = new ModelAndView("clientes/detalhes");
+			mv.addObject("cliente", cliente);
+			 return mv;
+		}
+	
+	
+		
+		return new ModelAndView("redirect:/clientes");
+	}
+	
+	@GetMapping("/clientes/{id}/delete")	
+	public ModelAndView delete(@PathVariable Long id) {
+		this.clienteRepository.deleteById(id);
+		
+		return new ModelAndView("redirect:/clientes");
 	}
 }
