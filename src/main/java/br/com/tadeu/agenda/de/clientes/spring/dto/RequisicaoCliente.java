@@ -9,10 +9,57 @@ public class RequisicaoCliente {
 	private String nome;
 	@NotBlank
 	private String cpf;
+	
+	
+	public String getLogradouro() {
+		return logradouro;
+	}
+	public void setLogradouro(String logradouro) {
+		this.logradouro = logradouro;
+	}
+	public String getComplemento() {
+		return complemento;
+	}
+	public void setComplemento(String complemento) {
+		this.complemento = complemento;
+	}
+	public String getBairro() {
+		return bairro;
+	}
+	public void setBairro(String bairro) {
+		this.bairro = bairro;
+	}
+	public String getLocalidade() {
+		return localidade;
+	}
+	public void setLocalidade(String localidade) {
+		this.localidade = localidade;
+	}
+	public String getUf() {
+		return uf;
+	}
+	public void setUf(String uf) {
+		this.uf = uf;
+	}
+
 	@NotBlank
 	private String telefone;
 	@NotBlank
 	private String email;
+	@NotBlank
+	private String cep;
+	@NotBlank
+	private String logradouro;
+	@NotBlank
+	private String complemento;
+	@NotBlank
+	private String bairro;
+	@NotBlank
+	private String localidade;
+	@NotBlank
+	private String uf;
+	
+	
 	
 	public String getNome() {
 		return nome;
@@ -39,6 +86,17 @@ public class RequisicaoCliente {
 		this.email = email;
 	}
 	
+	
+	
+	
+	
+	
+	public String getCep() {
+		return cep;
+	}
+	public void setCep(String cep) {
+		this.cep = cep;
+	}
 	@Override
 	public String toString() {
 		return "Nome: " + nome + ", CPF: " + cpf + ", Telefone: " + telefone + ", Email: " + email;

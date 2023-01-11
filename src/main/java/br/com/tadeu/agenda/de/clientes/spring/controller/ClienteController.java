@@ -1,7 +1,14 @@
 package br.com.tadeu.agenda.de.clientes.spring.controller;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.List;
 import java.util.Optional;
+
+import com.google.gson.Gson;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,7 +20,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import br.com.tadeu.agenda.de.clientes.spring.dto.RequisicaoCliente;
 import br.com.tadeu.agenda.de.clientes.spring.model.Cliente;
+import br.com.tadeu.agenda.de.clientes.spring.model.Endereco;
 import br.com.tadeu.agenda.de.clientes.spring.repository.ClienteRepository;
+import br.com.tadeu.agenda.de.clientes.spring.repository.EnderecoRepository;
 import jakarta.validation.Valid;
 
 @Controller
@@ -21,6 +30,9 @@ public class ClienteController {
 	
 	@Autowired
 	private ClienteRepository clienteRepository;
+	
+	@Autowired
+	private EnderecoRepository enderecoRepository;
 	
 	@GetMapping("/clientes")
 	public ModelAndView lista() {
@@ -40,7 +52,7 @@ public class ClienteController {
 	}
 	
 	@PostMapping("/clientes")
-	public ModelAndView cadastra(@Valid RequisicaoCliente requisicao, BindingResult bindingResult) {
+	public ModelAndView cadastra(@Valid RequisicaoCliente requisicao, BindingResult bindingResult) throws Exception {
 		System.out.println(requisicao);
 		
 		if(bindingResult.hasErrors()) {
@@ -48,10 +60,31 @@ public class ClienteController {
 			System.out.println("**********TEM ERRO*********");
 			return new ModelAndView("clientes/novo");
 		}
+		
+		//Consumindo uma api pública externa
+		URL url = new URL("https://viacep.com.br/ws/"+ requisicao.getCep() + "/json/");
+		URLConnection connection = url.openConnection();
+		InputStream is = connection.getInputStream();
+		BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+		
+		String cep = "";
+		StringBuilder jsonCep = new StringBuilder();
+		while((cep = br.readLine())!= null) {
+			jsonCep.append(cep);
+		}
+		
+		Endereco endereco = new Gson().fromJson(jsonCep.toString(), Endereco.class); 
+		this.enderecoRepository.save(endereco);
+		
+		System.out.println(jsonCep.toString());
+		
+		
 		ModelAndView mv = new ModelAndView("clientes/lista");
 		
 		Cliente cliente = new Cliente();
 		requisicao.transformaRequisicaoEmCliente(cliente);
+		cliente.setEndereco(endereco);
+		
 		
 		this.clienteRepository.save(cliente);
 		
@@ -108,7 +141,11 @@ public class ClienteController {
 	@PostMapping("/clientes/{id}")
 	public ModelAndView atualiza(@PathVariable Long id, @Valid RequisicaoCliente requisicao, BindingResult bindingResult) {
 		if(bindingResult.hasErrors()) {	
-			return new ModelAndView("/clientes/{id}/edit");
+			System.out.println("******erro*******");
+			ModelAndView mv = new ModelAndView("clientes/edit");
+			mv.addObject("clienteId", id);
+			
+			return mv;
 		}
 		else {
 			Optional<Cliente> optional = this.clienteRepository.findById(id);

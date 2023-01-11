@@ -5,7 +5,7 @@
 	</head>
 	<body>
 		<header th:replace="~{fragmentos :: header}"></header>	
-		<div class="container">
+		<div>
 			<table class="table">
 			  <thead>
 			    <tr>
@@ -15,6 +15,7 @@
 			      <th scope="col">Telefone</th>
 			      <th scope="col">Email</th>
 			      <th scope="col">Vendeu</th>
+			      <th scope="col">Endereço</th>			      				      
 			      <th scope="col"></th>
 			      <th scope="col"></th>
 			      <th scope="col"></th>
@@ -30,6 +31,8 @@
 			      <td th:text="${cliente.telefone}"></td>
 			      <td th:text="${cliente.email}"></td>
 			      <td th:text="${cliente.vendeu}"></td>
+			      <td th:text="${cliente.endereco}"></td>
+			      			      
 			      <td scope="col"><a th:href="@{clientes/{clienteId}(clienteId = ${cliente.id})}" href="">Detalhes</a></td>
 			      <td scope="col"><a th:href="@{clientes/{clienteId}/edit(clienteId = ${cliente.id})}" href="">Editar</a></td>
 			      <td scope="col"><a th:href="@{clientes/{clienteId}/delete(clienteId = ${cliente.Id})}" href="">Deletar</a></td>
